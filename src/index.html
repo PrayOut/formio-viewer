@@ -40,13 +40,13 @@
 
       // Allow them to provide a custom theme.
       if (query.theme) {
-        var cssLink = '<link rel="stylesheet" media="all" href="lib/bootswatch/';
+        var cssLink = '<link rel="stylesheet" href="lib/bootswatch/';
         cssLink += query.theme;
         cssLink += '/bootstrap.min.css" />';
         document.write(cssLink);
       }
       else {
-        document.write('<link rel="stylesheet" media="all" href="lib/bootstrap.min.css" />');
+        document.write('<link rel="stylesheet" href="lib/bootstrap.min.css" />');
       }
 
       // Allow them to provide SSO tokens to the form viewer.
@@ -60,7 +60,7 @@
       if (query.styles) {
         var styles = Base64.decode(query.styles);
         if (styles && styles.length) {
-          document.write('<link rel="stylesheet" media="all" href="' + styles + '" />');
+          document.write('<link rel="stylesheet" href="' + styles + '" />');
         }
       }
 
@@ -71,13 +71,13 @@
             display: none !important;
         }
     </style>
-    <link rel="stylesheet" media="all" href="lib/formio-full.min.css"/>
+    <link rel="stylesheet" href="lib/formio-full.min.css"/>
 
     <script>
     	/* ADD OUR OWN SOILTEC PROJECT CSS FILE */
 	    var soilTecCSSFile = "css/soiltec.css";
 	    if ( location.hostname == 'localhost' ) soilTecCSSFile = "http://soiltec.staging.wpengine.com/form-viewer/css/soiltec.css";
-	    document.write('<link rel="stylesheet" media="all" href="' + soilTecCSSFile + '"/>');
+	    document.write('<link rel="stylesheet" href="' + soilTecCSSFile + '"/>');
 	    
 	    /* ADJUST TEXTAREA SIZES TO FIT CONTENT UPON VIEWING */
 		window.adjustTextareas = function() {
@@ -125,51 +125,6 @@
     document.body.className = bodyClass;
   }
 </script>
-
-<!-- CUSTOM SOILTEC STYLE TWEAKS -->
-<style>
-	.cust-stamp iframe.formio-iframe {
-		height:100%;
-	}
-	.cust-stamp div.formio-form-wrapper {
-		margin: 0;
-	}
-	.cust-stamp div#page-container {
-		z-index: 100;
-	}
-	.cust-stamp .btn {
-		display: none;
-	}
-
-   .panel .po-heading {
-				 margin-bottom: 0px;
-				 margin-top: 10px;
-   }
-   .po-heading .panel-body {
-				 margin-left: 20px;
-				 margin-right: 55px;
-				 padding-bottom: 0px;
-				 padding-top: 5px;
-   }
-
-
-   .po-panel-main .panel-body {
-				 padding-left: 2px;
-   }
-   .po-grid .row {
-				 offset: 1px;
-				 margin-left: 0px;
-				 margin-right: 0px;
-   }
-   .po-grid .col {
-				 padding-left: 3px;
-				 padding-right: 0px;
-   }
-   .po-grid .btn {
-				 padding: 6px 6px;
-   }
-
-</style>
 
 <!-- BROWSE HAPPY BEGINS HERE -->
 <style>
