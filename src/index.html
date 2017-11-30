@@ -40,13 +40,13 @@
 
       // Allow them to provide a custom theme.
       if (query.theme) {
-        var cssLink = '<link rel="stylesheet" href="lib/bootswatch/';
+        var cssLink = '<link rel="stylesheet" media="all" href="lib/bootswatch/';
         cssLink += query.theme;
         cssLink += '/bootstrap.min.css" />';
         document.write(cssLink);
       }
       else {
-        document.write('<link rel="stylesheet" href="lib/bootstrap.min.css" />');
+        document.write('<link rel="stylesheet" media="all" href="lib/bootstrap.min.css" />');
       }
 
       // Allow them to provide SSO tokens to the form viewer.
@@ -60,7 +60,7 @@
       if (query.styles) {
         var styles = Base64.decode(query.styles);
         if (styles && styles.length) {
-          document.write('<link rel="stylesheet" href="' + styles + '" />');
+          document.write('<link rel="stylesheet" media="all" href="' + styles + '" />');
         }
       }
 
@@ -71,14 +71,19 @@
             display: none !important;
         }
     </style>
-    <link rel="stylesheet" href="lib/formio-full.min.css"/>
+    <link rel="stylesheet" media="all" href="lib/formio-full.min.css"/>
 
+	<!-- SOILTEC ADDITIONS -->
+	<!-- The numeral library loaded below is used by calculated fields on the form to format currecy fields in the Viewer -->
+	<script src="//cdnjs.cloudflare.com/ajax/libs/numeral.js/2.0.6/numeral.min.js"></script>
+	<!-- We also added a media="all" attribute to all of the stylesheet links in this document.  Chrome and Safari did not require it, but other browsers did.-->
     <script>
     	/* ADD OUR OWN SOILTEC PROJECT CSS FILE */
-	    var soilTecCSSFile = "css/soiltec.css";
-	    if ( location.hostname == 'localhost' ) soilTecCSSFile = "http://soiltec.staging.wpengine.com/form-viewer/css/soiltec.css";
-	    document.write('<link rel="stylesheet" href="' + soilTecCSSFile + '"/>');
-	    
+	    var soiltecCSSFile = "css/soiltec.css",
+	    	soiltecStampCSSFile = "css/soiltecStamp.css";
+	    if ( location.hostname == 'localhost' ) soiltecCSSFile = "http://soiltec.staging.wpengine.com/form-viewer/css/soiltec.css";
+	    document.write('<link rel="stylesheet" media="all" href="' + soiltecCSSFile + '"/>');
+
 	    /* ADJUST TEXTAREA SIZES TO FIT CONTENT UPON VIEWING */
 		window.adjustTextareas = function() {
             setTimeout( function() {
@@ -224,6 +229,7 @@
                 <a ng-if="hasSubmission" type="button" ng-click="generatePDF()"
                    style="float:right;cursor:pointer;margin-top:-32px"><img src="assets/download-pdf.png"
                                                                             style="height:30px"/></a>
+                <!-- SoilTec Addition ... had to change the read-only attribute below from "submitted" to "true" in order to force the email links to submissions be in read-only mode -->
                 <formio form="form" read-only="true" submission="submission" url="formSrc" ng-class="{'formio-submission': hasSubmission}"></formio>
             </div>
             <div ng-if="showLogin" style="margin-top: 20px;">
@@ -397,7 +403,10 @@
 
                 $rootScope.formLoading = false;
                 $timeout($rootScope.$apply.bind($rootScope));
+                
+                // Soiltec Adjustment
                 if ( typeof adjustTextareas != 'undefined' ) adjustTextareas();
+                
               }, onError).catch(onError);
             }
             else {
