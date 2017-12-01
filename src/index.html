@@ -73,7 +73,7 @@
     </style>
     <link rel="stylesheet" media="all" href="lib/formio-full.min.css"/>
 
-	<!-- SOILTEC ADDITIONS -->
+	<!-- SOILTEC HEADER ADDITIONS -->
 	<!-- The numeral library loaded below is used by calculated fields on the form to format currecy fields in the Viewer -->
 	<script src="//cdnjs.cloudflare.com/ajax/libs/numeral.js/2.0.6/numeral.min.js"></script>
 	<!-- We also added a media="all" attribute to all of the stylesheet links in this document.  Chrome and Safari did not require it, but other browsers did.-->
@@ -83,18 +83,6 @@
 	    	soiltecStampCSSFile = "css/soiltecStamp.css";
 	    if ( location.hostname == 'localhost' ) soiltecCSSFile = "http://soiltec.staging.wpengine.com/form-viewer/css/soiltec.css";
 	    document.write('<link rel="stylesheet" media="all" href="' + soiltecCSSFile + '"/>');
-
-	    /* ADJUST TEXTAREA SIZES TO FIT CONTENT UPON VIEWING */
-		window.adjustTextareas = function() {
-            setTimeout( function() {
-				let textareas = document.getElementsByTagName("textarea");
-				for (let i = 0; i < textareas.length; i++) {
-					let textarea = textareas[i];
-					textarea.rows = 1;
-					textarea.rows = Math.ceil((textarea.scrollHeight - 32) / 20) + 1;
-				}
-            }, 2000);
-		}
     </script>
     
 </head>
@@ -404,9 +392,6 @@
                 $rootScope.formLoading = false;
                 $timeout($rootScope.$apply.bind($rootScope));
                 
-                // Soiltec Adjustment
-                if ( typeof adjustTextareas != 'undefined' ) adjustTextareas();
-                
               }, onError).catch(onError);
             }
             else {
@@ -432,6 +417,17 @@
 
         // Load the form.
         loadForm();
+
+		// SoilTec Adjustment to run code after form is rendered
+		$rootScope.$on('formRender', function() {
+		    // Adjust textarea sizes to fit content upon viewing
+			let textareas = document.getElementsByTagName("textarea");
+			for (let i = 0; i < textareas.length; i++) {
+				let textarea = textareas[i];
+				textarea.rows = 1;
+				textarea.rows = Math.ceil((textarea.scrollHeight - 32) / 20) + 1;
+			}		
+		});
 
         // Bind to the submission of the form.
         $rootScope.$on('formSubmission', function (event, submission) {
