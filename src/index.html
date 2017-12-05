@@ -242,13 +242,13 @@
     </div>
 </div>
 <script src="lib/formio-full.min.js"></script>
-<script src="lib/seamless.child.min.js"></script>
+<!-- <script src="lib/seamless.child.min.js"></script> -->
 <script src="lib/jspdf.min.js"></script>
 <script src="lib/html2canvas.min.js"></script>
 <script type="text/javascript">
-  var parentPage = window.seamless.connect({
-    container: 'div.main'
-  });
+//  var parentPage = window.seamless.connect({
+//    container: 'div.main'
+//  });
   angular.module('formioFormApp', ['formio'])
     .config([
       '$locationProvider',
@@ -418,16 +418,26 @@
         // Load the form.
         loadForm();
 
-		// SoilTec Adjustment to run code after form is rendered
-		$rootScope.$on('formRender', function() {
+
+		// SoilTec Adjustments to run code after form is rendered
+		$rootScope.$on('submissionLoad', function(obj) {
+			// Change the nested form to the stamp that was submitted with the ticket
+			var stampComp = FormioUtils.getComponent(obj.targetScope.form.components, 'stamp');
+			if ( stampComp ) {
+				var stampToUse = $rootScope.submission.data.stamp.form;
+				stampComp.form = stampToUse;
+			}
+		});
+		$rootScope.$on('formRender', function(formObj) {
 		    // Adjust textarea sizes to fit content upon viewing
 			let textareas = document.getElementsByTagName("textarea");
 			for (let i = 0; i < textareas.length; i++) {
 				let textarea = textareas[i];
 				textarea.rows = 1;
 				textarea.rows = Math.ceil((textarea.scrollHeight - 32) / 20) + 1;
-			}		
+			}
 		});
+
 
         // Bind to the submission of the form.
         $rootScope.$on('formSubmission', function (event, submission) {
