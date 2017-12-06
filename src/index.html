@@ -424,8 +424,7 @@
 			// Change the nested form to the stamp that was submitted with the ticket
 			var stampComp = FormioUtils.getComponent(obj.targetScope.form.components, 'stamp');
 			if ( stampComp ) {
-				var stampToUse = $rootScope.submission.data.stamp.form;
-				stampComp.form = stampToUse;
+				stampComp.form = $rootScope.submission.data.stampSelector.data.stampForm._id;
 			}
 		});
 		$rootScope.$on('formRender', function(formObj) {
