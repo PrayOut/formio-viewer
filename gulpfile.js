@@ -37,7 +37,7 @@ gulp.task('lib', ['bootswatch'], function() {
       './node_modules/bootstrap/dist/css/bootstrap.min.css',
       './node_modules/bootstrap/dist/css/bootstrap.min.css.map',
       './node_modules/ng-formio/dist/formio-full**.*',
-      './node_modules/seamless/build/seamless.child.min.js',
+      './node_modules/seamless/build/seamless.parent.min.js',
       './node_modules/jspdf/dist/jspdf.min.js',
       './node_modules/html2canvas/dist/html2canvas.min.js',
       './node_modules/js-base64/base64.min.js'

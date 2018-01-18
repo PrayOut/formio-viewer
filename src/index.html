@@ -242,13 +242,10 @@
     </div>
 </div>
 <script src="lib/formio-full.min.js"></script>
-<!-- <script src="lib/seamless.child.min.js"></script> -->
+<script src="lib/seamless.parent.min.js"></script>
 <script src="lib/jspdf.min.js"></script>
 <script src="lib/html2canvas.min.js"></script>
 <script type="text/javascript">
-//  var parentPage = window.seamless.connect({
-//    container: 'div.main'
-//  });
   angular.module('formioFormApp', ['formio'])
     .config([
       '$locationProvider',
@@ -421,10 +418,24 @@
 
 		// SoilTec Adjustments to run code after form is rendered
 		$rootScope.$on('submissionLoad', function(obj) {
-			// Change the nested form to the stamp that was submitted with the ticket
-			var stampComp = FormioUtils.getComponent(obj.targetScope.form.components, 'stamp');
-			if ( stampComp && typeof $rootScope.submission.data.stampSelector.data.stampForm != 'undefined' ) {
-				stampComp.form = $rootScope.submission.data.stampSelector.data.stampForm._id;
+			// Change the nested form to the stamp that was submitted with the ticket.
+			// stampSelector type will be 'string' if no stamp and 'object' if a stamp was used.
+			if ( typeof $rootScope.submission.data.stampSelector == 'object' ) {
+				var stampComp = FormioUtils.getComponent(obj.targetScope.form.components, 'stamp');
+				if ( stampComp ) {
+					stampComp.form = $rootScope.submission.data.stampSelector.data.stampForm._id;
+				} else {
+					setTimeout( function() {
+						var child = window.seamless(document.getElementsByClassName('formio-iframe')[0], {
+							loading: 'LOADING STAMP',
+							styles: [
+								'#page-container{background:none}',
+								'#sidebar{display:none}',
+								'div.icon.calendar{display:none}'
+							]
+						});
+					},1000);
+				}
 			}
 		});
 		$rootScope.$on('formRender', function(formObj) {
