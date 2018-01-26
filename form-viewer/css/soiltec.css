@@ -201,6 +201,7 @@ div#form-group-lease, div#form-group-customer {
 	
 	.cust-stamp iframe {
 		height: 364px;
+		width: 101%;
 	}
 	
 /* totals section */
@@ -283,6 +284,10 @@ div#form-group-lease, div#form-group-customer {
 	#form-group-providerSignature, #form-group-customerSignature {
 		margin-left: 15px;
 		margin-right: 15px;
+	}
+	
+	.formio-signature-footer {
+		display: none;
 	}
 
 /* remove submit button */
