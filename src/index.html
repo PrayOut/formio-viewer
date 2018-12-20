@@ -78,10 +78,10 @@
 	<script src="//cdnjs.cloudflare.com/ajax/libs/numeral.js/2.0.6/numeral.min.js"></script>
 	<!-- We also added a media="all" attribute to all of the stylesheet links in this document.  Chrome and Safari did not require it, but other browsers did.-->
     <script>
+    	/* ADD A VARIABLE TO IDENTIFY THIS ENVIRONMENT */
+    	var inFormioViewer = true;
     	/* ADD OUR OWN SOILTEC PROJECT CSS FILE */
-	    var soiltecCSSFile = "css/soiltec.css",
-	    	soiltecStampCSSFile = "css/soiltecStamp.css";
-	    if ( location.hostname == 'localhost' ) soiltecCSSFile = "http://soiltec.staging.wpengine.com/form-viewer/css/soiltec.css";
+	    var soiltecCSSFile = "css/soiltec.css";
 	    document.write('<link rel="stylesheet" media="all" href="' + soiltecCSSFile + '"/>');
     </script>
     
@@ -418,14 +418,25 @@
 
 		// SoilTec Adjustments to run code after form is rendered
 		$rootScope.$on('submissionLoad', function(obj) {
-			// Change the nested form to the stamp that was submitted with the ticket.
-			// stampSelector type will be 'string' if no stamp and 'object' if a stamp was used.
+			// Change the nested form to the stamp if one was submitted with the ticket.
+			// There should be two submissionLoad events, one for the ticket form submission and another for the stamp form submission.
+			// In both cases, we check the $rootScope.submission (which will always be the ticket form submission) for its stampSelector property:
+			// -- if it is of type 'string', there is no stamp and we do nothing
+			// -- if it is of type 'object', a stamp was used and we do the following ...
 			if ( typeof $rootScope.submission.data.stampSelector == 'object' ) {
+				// Check the obj parameter passed to the submissionLoad event for a stamp component
 				var stampComp = FormioUtils.getComponent(obj.targetScope.form.components, 'stamp');
 				if ( stampComp ) {
+					// If we were able to get a handle to the stamp component, this is the submissionLoad event for the ticket form submission
+					// and we need to replace the default nested (stamp placeholder) form with the correct stamp form.  This fetches the stored
+					// PDF form for the appropriate stamp from the formio server and loads it in an iframe.
 					stampComp.form = $rootScope.submission.data.stampSelector.data.stampForm._id;
 				} else {
+					// If we did not get a handle to the stamp component, this is the submissionLoad event for the stamp form submission and we
+					// use this opportunity to pass some CSS via postMessage to the iframe using Travis's seamless libraries.
 					setTimeout( function() {
+						// Give the iframe one second to be added to the DOM and then use the seamless parent library (we added to the viewer) to
+						// talk to the seamless child library we paid Formio to add to all PDF forms with allowStyleInjection set to true.
 						var child = window.seamless(document.getElementsByClassName('formio-iframe')[0], {
 							loading: 'LOADING STAMP',
 							styles: [
