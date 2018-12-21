@@ -76,13 +76,12 @@
 	<!-- SOILTEC HEADER ADDITIONS -->
 	<!-- The numeral library loaded below is used by calculated fields on the form to format currecy fields in the Viewer -->
 	<script src="//cdnjs.cloudflare.com/ajax/libs/numeral.js/2.0.6/numeral.min.js"></script>
+    <!-- ADD OUR OWN SOILTEC PROJECT CSS FILE -->
+	<link rel="stylesheet" media="all" href="css/soiltec.css" />
 	<!-- We also added a media="all" attribute to all of the stylesheet links in this document.  Chrome and Safari did not require it, but other browsers did.-->
     <script>
     	/* ADD A VARIABLE TO IDENTIFY THIS ENVIRONMENT */
     	var inFormioViewer = true;
-    	/* ADD OUR OWN SOILTEC PROJECT CSS FILE */
-	    var soiltecCSSFile = "css/soiltec.css";
-	    document.write('<link rel="stylesheet" media="all" href="' + soiltecCSSFile + '"/>');
     </script>
     
 </head>
